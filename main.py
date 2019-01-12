@@ -1,5 +1,6 @@
 import datetime
 import os
+import subprocess
 import time
 
 import requests
@@ -26,16 +27,18 @@ def download_picture(url, path):
 def change_wallpaper(path):
     # 更换壁纸
     full_path = 'file://' + path
-    os.system('gsettings set org.gnome.desktop.background picture-uri ' + full_path)
+    subprocess.Popen('gsettings set org.gnome.desktop.background picture-uri ' + full_path, shell=True)
     time.sleep(2)
     # 更换锁屏
-    os.system('convert -blur 0x25 ~/.cache/wallpaper/* ~/Pictures/gdmlock.jpg')
+    subprocess.Popen('convert -blur 0x25 ~/.cache/wallpaper/* ~/Pictures/gdmlock.jpg', shell=True)
     time.sleep(3)
-    os.system('cp -f ~/Pictures/gdmlock.jpg /usr/share/backgrounds/')
+    subprocess.Popen('cp -f ~/Pictures/gdmlock.jpg /usr/share/backgrounds/', shell=True)
 
 
 if __name__ == '__main__':
-    picture_url = get_picture_url()
-    file = os.path.expanduser('~/Pictures/Wallpapers/' + datetime.date.today().strftime('%y%m%d') + '.jpg')
-    download_picture(picture_url, file)
+    file_name = datetime.date.today().strftime('%y%m%d') + '.jpg'
+    file = os.path.expanduser('~/Pictures/Wallpapers/' + file_name)
+    if not os.path.exists(file):
+        picture_url = get_picture_url()
+        download_picture(picture_url, file)
     change_wallpaper(file)

@@ -1,0 +1,14 @@
+[Unit]
+# 描述
+Description= wallpaper changer
+After=network.target
+
+[Service]
+Type=oneshot
+# 服务 start/stop 执行脚本(具体执行路径根据自己的目录更改)
+ExecStart=/bin/bash /home/jarhmj/PycharmProjects/wallpaper-changer/start.sh
+RemainAfterExit=yes
+
+[Install]
+# 一些简单的依赖信息
+WantedBy=multi-user.target
